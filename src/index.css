@@ -18,11 +18,13 @@ body, html {
 .player1 {
   color: white;
   background-color: black;
+  border-color: white;
 }
 
 .player2 {
   color: black;
   background-color: white;
+  border-color: white;
 }
 
 code {
