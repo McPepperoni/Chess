@@ -71,6 +71,11 @@ export default function Game({ currentPlayer, children, ...restProps }) {
     [2, 1],
     [1, 1],
   ]);
+  const [legalMoves, setLegalMoves] = useState([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ]);
 
   return (
     <Board>
@@ -88,6 +93,7 @@ export default function Game({ currentPlayer, children, ...restProps }) {
                     console.log(
                       LegalMoves({ x: i, y: j }, pieces[i * 8 + j][0], pieces)
                     );
+                    setLegalMoves();
                   }}
                 ></Board.Piece>
               </Board.Tile>

@@ -34,9 +34,10 @@ function PossibleMove(pattern, pos, board, side) {
 
   if (pattern.length === 2) {
     var checkedDir = [0, 0, 0, 0, 0, 0, 0, 0];
-    var step = 1;
+    var step = 0;
 
-    while (checkedDir.find((e) => e === 1) < 8) {
+    while (!checkedDir.every((item) => item === 1)) {
+      step++;
       for (let i = 0; i < 8; i++) {
         if (pattern[0][i] === 0) {
           checkedDir[i] = 1;
@@ -51,7 +52,7 @@ function PossibleMove(pattern, pos, board, side) {
           x:
             side === 2
               ? step * dir[i][0] * Black + pos.x
-              : step * dir[i][1] + pos.x,
+              : step * dir[i][0] + pos.x,
           y: step * dir[i][1] + pos.y,
         };
 
@@ -80,10 +81,8 @@ function PossibleMove(pattern, pos, board, side) {
         }
       }
 
-      step++;
-
       if (pattern[1][0] === -1) continue;
-      if (pattern === step) break;
+      if (pattern[1][0] === step) break;
     }
   } else {
     for (let i = 0; i < pattern.length; i++) {
@@ -121,19 +120,29 @@ function PossibleMove(pattern, pos, board, side) {
 }
 
 export default function LegalMoves(pos, id, board) {
-  console.log(board);
+  var moves = [];
   switch (id) {
     case 0:
-      return PossibleMove(Pawn, pos, board, board[pos.x * 8 + pos.y][1]);
+      moves = PossibleMove(Pawn, pos, board, board[pos.x * 8 + pos.y][1]);
+      break;
     case 1:
-      return PossibleMove(Rook, pos, board, board[pos.x * 8 + pos.y][1]);
+      moves = PossibleMove(Rook, pos, board, board[pos.x * 8 + pos.y][1]);
+      break;
     case 2:
-      return PossibleMove(Knight, pos, board, board[pos.x * 8 + pos.y][1]);
+      moves = PossibleMove(Knight, pos, board, board[pos.x * 8 + pos.y][1]);
+      break;
     case 3:
-      return PossibleMove(Bishop, pos, board, board[pos.x * 8 + pos.y][1]);
+      moves = PossibleMove(Bishop, pos, board, board[pos.x * 8 + pos.y][1]);
+      break;
     case 4:
-      return PossibleMove(Queen, pos, board, board[pos.x * 8 + pos.y][1]);
+      moves = PossibleMove(Queen, pos, board, board[pos.x * 8 + pos.y][1]);
+      break;
     default:
-      return PossibleMove(King, pos, board, board[pos.x * 8 + pos.y][1]);
+      moves = PossibleMove(King, pos, board, board[pos.x * 8 + pos.y][1]);
+      break;
   }
+
+  var valids = new Array(64).fill(0);
+
+  moves.forEach((item) => valids);
 }
