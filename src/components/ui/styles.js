@@ -28,12 +28,14 @@ export const PlayerInfo = styled.div`
     width: fit-content;
   }
 
-  svg {
+
+`;
+
+export const ColorIndicator = styled.div`
     font-size: 50px;
     line-height: 1;
     height: calc(100% - 24px);
     padding: 10px;
     border: 2px solid;
     border-radius: 10px;
-  }
-`;
+`

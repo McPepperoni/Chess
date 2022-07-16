@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Bishop, King, Knight, Pawn, Queen, Rook } from "../Global";
+import { UpdateMap } from "../utils/Utils";
 import {
   Container,
   CoordinateHorizontal,
@@ -7,6 +8,8 @@ import {
   Cover,
   Grid,
   Piece,
+  PieceIndicator,
+  Promotion,
   Tile,
 } from "./styles";
 
@@ -63,6 +66,20 @@ Board.Piece = function BoardPiece({ id = 0, children, ...restProps }) {
   );
 };
 
-Board.Promote = function BoardPromote({ children, ...restProps }) {
-  return <Cover></Cover>;
+Board.Promote = function BoardPromote({setPromote, Map, setMap, pos, children, ...restProps }) {
+  const prom = [<Rook />, <Knight />, <Bishop />, <Queen />];
+  return (
+    <Cover>
+      <Promotion>
+        <span>Please select promotion</span>
+        {prom.map((item, index) => <PieceIndicator key={index} onClick={() => {
+          const update = UpdateMap(Map, pos, pos, index + 1, [], [])
+          setMap(
+            update[0]
+          );
+          setPromote(false);
+        }} {...restProps}>{item}</ PieceIndicator>)}
+      </Promotion>
+    </Cover>
+  );
 };

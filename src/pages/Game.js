@@ -7,6 +7,10 @@ export default function Game({
   setCurrentPlayer,
   currentPlayer,
   children,
+  taken1,
+  setTaken1,
+  taken2,
+  setTaken2,
   ...restProps
 }) {
   const tiles = Array(8).fill(0);
@@ -83,12 +87,14 @@ export default function Game({
   ]);
 
   const [currentSelect, setCurrentSelect] = useState({ x: -1, y: -1 });
+  const [prevSelect, setPrevSelect] = useState({x: -1, y: -1});
+  const [promote, setPromote] = useState(false)
 
   return (
     <>
-      <Board.Promote></Board.Promote>
       <Board>
         {children}
+        {promote === true ? <Board.Promote setPromote={setPromote} setMap={setPieces} Map={pieces} pos={prevSelect}></Board.Promote> : null}
         <Board.Grid>
           {tiles.map((_, i) =>
             tiles.map((_, j) => {
@@ -115,12 +121,20 @@ export default function Game({
                         );
                       }
                       if (legalMovesMap[i * 8 + j] > 1) {
+                        const update = UpdateMap(pieces, currentSelect, { x: i, y: j }, -1,taken1, taken2)
                         setPieces(
-                          UpdateMap(pieces, currentSelect, { x: i, y: j })
+                          update[0]
                         );
+                        setTaken1(update[1])
+                        setTaken2(update[2])
+                        setPrevSelect({ x: i, y: j });
                         setCurrentSelect({ x: -1, y: -1 });
                         setLegalMovesMap(() => new Array(64).fill(0));
                         setCurrentPlayer(() => (currentPlayer === 1 ? 2 : 1));
+
+                        if(pieces[i * 8 + j][0] === 0 && (i === 0 || i === 7)) {
+                          setPromote(true);
+                        }
                       }
                     }}
                   ></Board.Piece>

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useStopwatch } from "react-timer-hook";
-import { Pawn } from "../Global";
-import { PlayerInfo } from "./styles";
+import { Bishop, King, Knight, Pawn, Queen, Rook } from "../Global";
+import { ColorIndicator, PlayerInfo } from "./styles";
 
-export default function UI({ player, currentPlayer, children, ...restProps }) {
+export default function UI({ player, currentPlayer, children, taken, ...restProps }) {
   const { seconds, minutes, hours, start, pause } = useStopwatch({
     autoStart: false,
   });
@@ -22,10 +22,28 @@ export default function UI({ player, currentPlayer, children, ...restProps }) {
             ":" +
             seconds.toString().padStart(2, "0")}
           <p>{children}</p>
+          {taken.map((id) => {
+            switch (id) {
+              case 0:
+                return <Pawn />;
+              case 1:
+                return <Rook />;
+              case 2:
+                return <Knight />;
+              case 3:
+                return <Bishop />;
+              case 4:
+                return <Queen />;
+              case 5:
+                return <King />;
+              default:
+                return <></>;
+            }
+          })}
         </div>
-        <div>
-          <Pawn {...restProps} />
-        </div>
+        <ColorIndicator {...restProps} >
+          <Pawn />
+        </ColorIndicator>
       </PlayerInfo>
     </>
   );

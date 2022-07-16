@@ -111,10 +111,35 @@ export const Piece = styled.div`
 `;
 
 export const Cover = styled.div`
-  display: absolute;
+  position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.7);
+  z-index: 99999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
+
+export const Promotion = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 10px 30px;
+  background-color: white;
+  gap: 20px;
+  border-radius: 10px;
+`
+
+export const PieceIndicator = styled.button`
+    cursor: pointer;
+    font-size: 50px;
+    line-height: 1;
+    height: calc(100% - 24px);
+    padding: 10px;
+    border: 3px solid;
+    border-radius: 10px;
+    background-color: transparent;
+`
