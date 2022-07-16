@@ -198,7 +198,7 @@ export default function LegalMoves(pos, id, board) {
 LegalMoves.IsLegal = function LegalMovesIsLegal(pos, board) {
   var opposites = []
   board.forEach((item, i) => {
-    if(item[0] !== -1 && item[1] !== board[posFrom.x * 8 + posFrom.y][1]) {
+    if(item[0] !== -1 && item[1] !== board[pos.x * 8 + pos.y][1]) {
       opposites.push([i, item[0]]);
     }
   })
