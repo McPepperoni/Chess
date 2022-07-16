@@ -4,6 +4,7 @@ import {
   Container,
   CoordinateHorizontal,
   CoordinateVertical,
+  Cover,
   Grid,
   Piece,
   Tile,
@@ -60,4 +61,8 @@ Board.Piece = function BoardPiece({ id = 0, children, ...restProps }) {
       })()}
     </Piece>
   );
+};
+
+Board.Promote = function BoardPromote({ children, ...restProps }) {
+  return <Cover></Cover>;
 };

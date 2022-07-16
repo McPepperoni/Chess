@@ -1,106 +1,135 @@
 import React, { useState } from "react";
 import Board from "../components/board";
 import LegalMoves from "../components/gameLogics/legalMoves";
-import { NumToString } from "../components/utils/Utils";
+import { NumToString, UpdateMap } from "../components/utils/Utils";
 
-export default function Game({ currentPlayer, children, ...restProps }) {
+export default function Game({
+  setCurrentPlayer,
+  currentPlayer,
+  children,
+  ...restProps
+}) {
   const tiles = Array(8).fill(0);
   const [pieces, setPieces] = useState([
-    [1, 2],
-    [2, 2],
-    [3, 2],
-    [4, 2],
-    [5, 2],
-    [3, 2],
-    [2, 2],
-    [1, 2],
-    [0, 2],
-    [0, 2],
-    [0, 2],
-    [0, 2],
-    [0, 2],
-    [0, 2],
-    [0, 2],
-    [0, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [-1, 2],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-    [0, 1],
-    [1, 1],
-    [2, 1],
-    [3, 1],
-    [4, 1],
-    [5, 1],
-    [3, 1],
-    [2, 1],
-    [1, 1],
+    [1, 2, false],
+    [2, 2, false],
+    [3, 2, false],
+    [4, 2, false],
+    [5, 2, false],
+    [3, 2, false],
+    [2, 2, false],
+    [1, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [0, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [-1, 2, false],
+    [0, 1, false],
+    [0, 1, false],
+    [0, 1, false],
+    [0, 1, false],
+    [0, 1, false],
+    [0, 1, false],
+    [0, 1, false],
+    [0, 1, false],
+    [1, 1, false],
+    [2, 1, false],
+    [3, 1, false],
+    [4, 1, false],
+    [5, 1, false],
+    [3, 1, false],
+    [2, 1, false],
+    [1, 1, false],
   ]);
-  const [legalMoves, setLegalMoves] = useState([
+  const [legalMovesMap, setLegalMovesMap] = useState([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
 
+  const [currentSelect, setCurrentSelect] = useState({ x: -1, y: -1 });
+
   return (
-    <Board>
-      {children}
-      <Board.Grid>
-        {tiles.map((_, i) =>
-          tiles.map((_, j) => {
-            return (
-              <Board.Tile key={NumToString(i, j)} row={i}>
-                <Board.Piece
-                  currentPlayer={currentPlayer}
-                  id={pieces[i * 8 + j][0]}
-                  side={pieces[i * 8 + j][1]}
-                  onClick={() => {
-                    console.log(
-                      LegalMoves({ x: i, y: j }, pieces[i * 8 + j][0], pieces)
-                    );
-                    setLegalMoves();
-                  }}
-                ></Board.Piece>
-              </Board.Tile>
-            );
-          })
-        )}
-      </Board.Grid>
-    </Board>
+    <>
+      <Board.Promote></Board.Promote>
+      <Board>
+        {children}
+        <Board.Grid>
+          {tiles.map((_, i) =>
+            tiles.map((_, j) => {
+              return (
+                <Board.Tile key={NumToString(i, j)} row={i}>
+                  <Board.Piece
+                    currentPlayer={currentPlayer}
+                    id={pieces[i * 8 + j][0]}
+                    side={pieces[i * 8 + j][1]}
+                    valid={legalMovesMap[i * 8 + j]}
+                    selected={currentSelect.x === i && currentSelect.y === j}
+                    onClick={() => {
+                      if (
+                        pieces[i * 8 + j][0] !== -1 &&
+                        currentPlayer === pieces[i * 8 + j][1]
+                      ) {
+                        setCurrentSelect({ x: i, y: j });
+                        setLegalMovesMap(
+                          LegalMoves(
+                            { x: i, y: j },
+                            pieces[i * 8 + j][0],
+                            pieces
+                          )
+                        );
+                      }
+                      if (legalMovesMap[i * 8 + j] > 1) {
+                        setPieces(
+                          UpdateMap(pieces, currentSelect, { x: i, y: j })
+                        );
+                        setCurrentSelect({ x: -1, y: -1 });
+                        setLegalMovesMap(() => new Array(64).fill(0));
+                        setCurrentPlayer(() => (currentPlayer === 1 ? 2 : 1));
+                      }
+                    }}
+                  ></Board.Piece>
+                </Board.Tile>
+              );
+            })
+          )}
+        </Board.Grid>
+      </Board>
+    </>
   );
 }

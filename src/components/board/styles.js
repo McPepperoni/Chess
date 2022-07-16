@@ -73,6 +73,7 @@ export const Tile = styled.div`
 `;
 
 export const Piece = styled.div`
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   display: flex;
@@ -80,14 +81,20 @@ export const Piece = styled.div`
   align-items: center;
   position: relative;
 
-  cursor: ${({ currentPlayer, PieceID, side }) =>
-    PieceID > -1 && currentPlayer === side ? "pointer" : "initial"};
+  background-color: ${({ valid }) =>
+    valid === 3 ? "#e2514c" : valid === 2 ? "#779455" : "transparent"};
+  border: ${({ valid }) => (valid === 2 ? "1px white dashed" : "0")};
+
+  cursor: ${({ currentPlayer, PieceID, side, valid }) =>
+    valid > 1 || (PieceID > -1 && currentPlayer === side)
+      ? "pointer"
+      : "initial"};
   color: ${({ side }) => (side === 1 ? "white" : "black")};
 
   ::before {
     content: "";
     box-sizing: border-box;
-    display: none;
+    display: ${({ selected }) => (selected === true ? "flex" : "none")};
     position: absolute;
     border: ${({ side }) =>
       side === 1 ? "4px dashed white" : "4px dashed black"};
@@ -101,4 +108,13 @@ export const Piece = styled.div`
         PieceID > -1 && currentPlayer === side ? "flex" : "none"};
     }
   }
+`;
+
+export const Cover = styled.div`
+  display: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
 `;

@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       {player1.ready === true && player2.ready === true ? (
-        <Game currentPlayer={currentPlayer}>
+        <Game currentPlayer={currentPlayer} setCurrentPlayer={setCurrentPlayer}>
           <UI className="player2" player={2} currentPlayer={currentPlayer}>
             {player2.ign}
           </UI>
