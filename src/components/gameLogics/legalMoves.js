@@ -260,11 +260,17 @@ LegalMoves.King = function LegalMovesKing(pos, board) {
       board[2][0] === -1 &&
       board[3][0] === -1
     ) {
-      castling.push([2, [0, 3, 1, -1]]);
+      castling.push([
+        [2, 2],
+        [0, 3, 1, -1],
+      ]);
     }
 
     if (board[7][2] === false && board[6][0] === -1 && board[5][0] === -1) {
-      castling.push([6, [7, 5, 1, -1]]);
+      castling.push([
+        [6, 2],
+        [7, 5, 1, -1],
+      ]);
     }
   }
 
@@ -275,12 +281,89 @@ LegalMoves.King = function LegalMovesKing(pos, board) {
       board[58][0] === -1 &&
       board[59][0] === -1
     ) {
-      castling.push([58, [56, 59, 1, -1]]);
+      castling.push([
+        [58, 2],
+        [56, 59, 1, -1],
+      ]);
     }
 
     if (board[63][2] === false && board[62][0] === -1 && board[61][0] === -1) {
-      castling.push([62, [63, 61, 1, -1]]);
+      castling.push([
+        [62, 2],
+        [63, 61, 1, -1],
+      ]);
     }
   }
   return castling;
+};
+
+LegalMoves.Pawn = function LegalMovesPawn(pos, enPassant, board) {
+  var en = [];
+
+  if (board[pos.x * 8 + pos.y][1] === 2) {
+    const left = pos.y - 1;
+    const right = pos.y + 1;
+
+    if (pos.x === 4) {
+      if (left > 0) {
+        if (
+          board[pos.x * 8 + left][0] === 0 &&
+          board[pos.x * 8 + left][1] === 1 &&
+          enPassant[pos.x * 8 + left] === false
+        ) {
+          en.push([
+            [pos.x * 8 + left + 8, 3],
+            [pos.x * 8 + left, pos.x * 8 + left, -1, -1],
+          ]);
+        }
+      }
+
+      if (right < 7) {
+        if (
+          board[pos.x * 8 + right][0] === 0 &&
+          board[pos.x * 8 + right][1] === 1 &&
+          enPassant[pos.x * 8 + right] === false
+        ) {
+          en.push([
+            [pos.x * 8 + right + 8, 3],
+            [pos.x * 8 + right, pos.x * 8 + right, -1, -1],
+          ]);
+        }
+      }
+    }
+  }
+  if (board[pos.x * 8 + pos.y][1] === 1) {
+    const left = pos.y - 1;
+    const right = pos.y + 1;
+
+    if (pos.x === 3) {
+      if (left > 0) {
+        if (
+          board[pos.x * 8 + left][0] === 0 &&
+          board[pos.x * 8 + left][1] === 2 &&
+          enPassant[pos.x * 8 + left] === false
+        ) {
+          en.push([
+            [pos.x * 8 + left - 8, 3],
+            [pos.x * 8 + left, pos.x * 8 + left, -1, -1],
+          ]);
+        }
+      }
+
+      if (right < 7) {
+        if (
+          board[pos.x * 8 + right][0] === 0 &&
+          board[pos.x * 8 + right][1] === 2 &&
+          enPassant[pos.x * 8 + right] === false
+        ) {
+          en.push([
+            [pos.x * 8 + right - 8, 3],
+            [pos.x * 8 + right, pos.x * 8 + right, -1, -1],
+          ]);
+        }
+      }
+    }
+  }
+
+  return en;
 };

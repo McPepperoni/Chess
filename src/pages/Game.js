@@ -136,6 +136,14 @@ export default function Game({
                             );
                           }
 
+                          if (pieces[i * 8 + j][0] === 0) {
+                            extraMoves = LegalMoves.Pawn(
+                              { x: i, y: j },
+                              enPassant,
+                              pieces
+                            );
+                          }
+
                           var moves = LegalMoves(
                             { x: i, y: j },
                             pieces[i * 8 + j][0],
@@ -144,7 +152,7 @@ export default function Game({
 
                           var swapAble = [];
                           extraMoves.forEach((item) => {
-                            moves[item[0]] = 2;
+                            moves[item[0][0]] = item[0][1];
                             swapAble.push(item);
                           });
 
@@ -154,6 +162,7 @@ export default function Game({
                         });
                       }
                       if (legalMovesMap[i * 8 + j] > 1) {
+                        setEnPassant(UpdateEnPassant([...pieces], enPassant));
                         var update = UpdateMap(
                           pieces,
                           currentSelect,
@@ -165,7 +174,7 @@ export default function Game({
 
                         var swapIdex = [];
                         for (var s = 0; s < swap.length; i++) {
-                          if (swap[s][0] === i * 8 + j) {
+                          if (swap[s][0][0] === i * 8 + j) {
                             swapIdex = swap[s][1];
                             break;
                           }
@@ -176,7 +185,6 @@ export default function Game({
                           update[0][swapIdex[1]][0] = swapIdex[2];
                         }
 
-                        setEnPassant(UpdateEnPassant(pieces, enPassant));
                         setPieces(update[0]);
                         setTaken1(update[1]);
                         setTaken2(update[2]);
