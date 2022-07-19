@@ -16,7 +16,7 @@ export const Grid = styled.div`
   grid-template-columns: repeat(8, 1fr);
   aspect-ratio: 1;
   width: 40%;
-  min-width: 360px;
+  min-width: 330px;
   border: 2px solid white;
   box-sizing: border-box;
 
@@ -29,7 +29,7 @@ export const Grid = styled.div`
   }
 
   @media (max-width: 512px) {
-    width: 90%;
+    width: 80%;
   }
 
   @media (orientation: landscape) {
