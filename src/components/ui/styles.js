@@ -1,6 +1,7 @@
 import styled from "styled-components/macro";
 
 export const PlayerInfo = styled.div`
+  box-sizing: border-box;
   position: absolute;
   background-color: white;
   display: flex;
@@ -28,14 +29,25 @@ export const PlayerInfo = styled.div`
     width: fit-content;
   }
 
-
+  @media (orientation: portrait) {
+    &:first-of-type,
+    &:nth-of-type(2) {
+      border-radius: 0;
+      width: 100vw;
+      padding: 10px;
+    }
+  }
 `;
 
 export const ColorIndicator = styled.div`
-    font-size: 50px;
-    line-height: 1;
-    height: calc(100% - 24px);
-    padding: 10px;
-    border: 2px solid;
-    border-radius: 10px;
-`
+  font-size: 50px;
+  line-height: 1;
+  height: calc(100% - 24px);
+  padding: 10px;
+  border: 2px solid;
+  border-radius: 10px;
+
+  @media (orientation: portrait) {
+    height: calc(100% - 90px);
+  }
+`;

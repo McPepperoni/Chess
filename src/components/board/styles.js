@@ -15,10 +15,26 @@ export const Grid = styled.div`
   position: relative;
   grid-template-columns: repeat(8, 1fr);
   aspect-ratio: 1;
-  height: 90%;
-  min-height: 564px;
+  width: 40%;
+  min-width: 360px;
   border: 2px solid white;
   box-sizing: border-box;
+
+  @media (max-width: 1366px) {
+    width: 50%;
+  }
+
+  @media (max-width: 1024px) {
+    width: 80%;
+  }
+
+  @media (max-width: 512px) {
+    width: 90%;
+  }
+
+  @media (orientation: landscape) {
+    width: 40%;
+  }
 `;
 
 export const CoordinateHorizontal = styled.div`
@@ -29,22 +45,32 @@ export const CoordinateHorizontal = styled.div`
   color: #999;
   position: absolute;
   bottom: 100%;
-  font-size: 30px;
+  font-size: 15px;
+  margin-bottom: 10px;
 
   p {
     margin: 0;
     width: calc(100% / 7);
     text-align: center;
-    margin-bottom: 10px;
+  }
+
+  @media (max-width: 1024px) {
+    margin-bottom: 5px;
+  }
+
+  @media (orientation: landscape) {
+    font-size: 10px;
   }
 `;
 
 export const CoordinateVertical = styled(CoordinateHorizontal)`
   flex-direction: column;
   width: fit-content;
+  line-height: 1;
   height: 100%;
   bottom: 0;
   right: 100%;
+  margin: 0;
   margin-right: 20px;
 
   p {
@@ -56,6 +82,10 @@ export const CoordinateVertical = styled(CoordinateHorizontal)`
     margin-bottom: 0px;
     display: flex;
     align-items: center;
+  }
+
+  @media (max-width: 1024px) {
+    margin-right: 5px;
   }
 `;
 
@@ -70,6 +100,10 @@ export const Tile = styled.div`
 
   &:nth-last-of-type(2n + 1) {
     background-color: ${({ row }) => (row % 2 === 0 ? "#666" : "#444")};
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 40px;
   }
 `;
 
