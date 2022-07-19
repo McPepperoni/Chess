@@ -16,6 +16,7 @@ export const Grid = styled.div`
   grid-template-columns: repeat(8, 1fr);
   aspect-ratio: 1;
   height: 90%;
+  min-height: 564px;
   border: 2px solid white;
   box-sizing: border-box;
 `;
@@ -61,7 +62,7 @@ export const CoordinateVertical = styled(CoordinateHorizontal)`
 export const Tile = styled.div`
   width: 100%;
   aspect-ratio: 1;
-  font-size: 70px;
+  font-size: 60px;
 
   &:nth-last-of-type(2n) {
     background-color: ${({ row }) => (row % 2 === 0 ? "#444" : "#777")};
@@ -131,15 +132,15 @@ export const Promotion = styled.div`
   background-color: white;
   gap: 20px;
   border-radius: 10px;
-`
+`;
 
 export const PieceIndicator = styled.button`
-    cursor: pointer;
-    font-size: 50px;
-    line-height: 1;
-    height: calc(100% - 24px);
-    padding: 10px;
-    border: 3px solid;
-    border-radius: 10px;
-    background-color: transparent;
-`
+  cursor: pointer;
+  font-size: 50px;
+  line-height: 1;
+  height: calc(100% - 24px);
+  padding: 10px;
+  border: 3px solid;
+  border-radius: 10px;
+  background-color: transparent;
+`;
