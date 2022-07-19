@@ -31,27 +31,29 @@ const Bishop = [[0, 1, 0, 1, 0, 1, 0, 1], [-1]];
 const Queen = [[1, 1, 1, 1, 1, 1, 1, 1], [-1]];
 
 const King = [
-  [0,0,0,0,0],
-  [0,3,3,3,0],
-  [0,3,0,3,0],
-  [0,3,3,3,0],
-  [0,0,0,0,0],
+  [0, 0, 0, 0, 0],
+  [0, 3, 3, 3, 0],
+  [0, 3, 0, 3, 0],
+  [0, 3, 3, 3, 0],
+  [0, 0, 0, 0, 0],
 ];
 
 function dirVector(from, to) {
-  const length = Math.sqrt(Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2))
-  const vec = {x: (to.x - from.x) / length, y: (to.y - from.y) / length}
+  const length = Math.sqrt(
+    Math.pow(from.x - to.x, 2) + Math.pow(from.y - to.y, 2)
+  );
+  const vec = { x: (to.x - from.x) / length, y: (to.y - from.y) / length };
 
-  if(vec.x === -1 || vec.y === 0) return [0, length];
-  if(vec.x === -1 || vec.y === 1) return [1, length];
-  if(vec.x === 0 || vec.y === 1) return [2, length];
-  if(vec.x === 1 || vec.y === 1) return [3, length];
-  if(vec.x === 1 || vec.y === 0) return [4, length];
-  if(vec.x === 1 || vec.y === -1) return [5, length];
-  if(vec.x === 0 || vec.y === -1) return [6, length];
-  if(vec.x === -1 || vec.y === -1) return [7, length];
+  if (vec.x === -1 && vec.y === 0) return [0, length];
+  if (vec.x === -1 && vec.y === 1) return [1, length];
+  if (vec.x === 0 && vec.y === 1) return [2, length];
+  if (vec.x === 1 && vec.y === 1) return [3, length];
+  if (vec.x === 1 && vec.y === 0) return [4, length];
+  if (vec.x === 1 && vec.y === -1) return [5, length];
+  if (vec.x === 0 && vec.y === -1) return [6, length];
+  if (vec.x === -1 && vec.y === -1) return [7, length];
 
-  return -1
+  return -1;
 }
 
 function PossibleMove(pattern, pos, board, side, moved = false) {
@@ -196,19 +198,20 @@ export default function LegalMoves(pos, id, board) {
 }
 
 LegalMoves.IsLegal = function LegalMovesIsLegal(pos, board) {
-  var opposites = []
+  var opposites = [];
   board.forEach((item, i) => {
-    if(item[0] !== -1 && item[1] !== board[pos.x * 8 + pos.y][1]) {
+    if (item[0] !== -1 && item[1] !== board[pos.x * 8 + pos.y][1]) {
       opposites.push([i, item[0]]);
     }
-  })
-  
+  });
+
   var i = 0;
   while (true) {
+    if (i === opposites) break;
     var pattern = [];
-    switch (opposites[0]) {
+    switch (opposites[i][1][0]) {
       case 0:
-        pattern = board[pos.x * 8 + pos.y][2] === true ? PawnMoved : Pawn
+        pattern = board[pos.x * 8 + pos.y][2] === true ? PawnMoved : Pawn;
         break;
       case 1:
         pattern = Rook;
@@ -225,19 +228,59 @@ LegalMoves.IsLegal = function LegalMovesIsLegal(pos, board) {
       default:
         pattern = King;
         break;
-      }
-    
-      const dir = dirVector(pos, {x: Math.floor(opposites[i][0] / 8), y: opposites[i][0] % 8})
+    }
 
-      if(dir === -1) {
-        opposites.splice(i, 1);
-        continue;
-      }
+    const dir = dirVector(pos, {
+      x: Math.floor(opposites[i][0] / 8),
+      y: opposites[i][0] % 8,
+    });
 
-      if(pattern[dir[0]] === 0) {
-        opposites.splice(i, 1);
-        continue;
-      }
+    if (dir === -1) {
+      opposites.splice(i, 1);
+      continue;
+    }
+
+    if (pattern[dir[0]] === 0) {
+      opposites.splice(i, 1);
+      continue;
+    }
+
+    i++;
+  }
+};
+
+LegalMoves.King = function LegalMovesKing(pos, board) {
+  var castling = [];
+  if (board[pos.x * 8 + pos.y][2] === true) return castling;
+
+  if (board[pos.x * 8 + pos.y][1] === 2) {
+    if (
+      board[0][2] === false &&
+      board[1][0] === -1 &&
+      board[2][0] === -1 &&
+      board[3][0] === -1
+    ) {
+      castling.push([2, [0, 3, 1, -1]]);
+    }
+
+    if (board[7][2] === false && board[6][0] === -1 && board[5][0] === -1) {
+      castling.push([6, [7, 5, 1, -1]]);
+    }
   }
 
-}
+  if (board[pos.x * 8 + pos.y][1] === 1) {
+    if (
+      board[56][2] === false &&
+      board[57][0] === -1 &&
+      board[58][0] === -1 &&
+      board[59][0] === -1
+    ) {
+      castling.push([58, [56, 59, 1, -1]]);
+    }
+
+    if (board[63][2] === false && board[62][0] === -1 && board[61][0] === -1) {
+      castling.push([62, [63, 61, 1, -1]]);
+    }
+  }
+  return castling;
+};

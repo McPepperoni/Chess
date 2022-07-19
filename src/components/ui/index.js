@@ -1,15 +1,26 @@
 import React, { useEffect } from "react";
-import { useStopwatch } from "react-timer-hook";
+import { useTimer } from "react-timer-hook";
 import { Bishop, King, Knight, Pawn, Queen, Rook } from "../Global";
 import { ColorIndicator, PlayerInfo } from "./styles";
 
-export default function UI({ player, currentPlayer, children, taken, ...restProps }) {
-  const { seconds, minutes, hours, start, pause } = useStopwatch({
-    autoStart: false,
+export default function UI({
+  player,
+  currentPlayer,
+  children,
+  taken,
+  winner,
+  ...restProps
+}) {
+  var t = new Date(); // Epoch
+  t.setSeconds(t.getSeconds() + 600);
+
+  const { seconds, minutes, hours, pause, start } = useTimer({
+    expiryTimestamp: t,
+    onExpire: () => console.warn("onExpire called"),
   });
 
   useEffect(() => {
-    currentPlayer === player ? start() : pause();
+    currentPlayer === player && winner === 0 ? start() : pause();
   }, [currentPlayer]);
 
   return (
@@ -41,7 +52,7 @@ export default function UI({ player, currentPlayer, children, taken, ...restProp
             }
           })}
         </div>
-        <ColorIndicator {...restProps} >
+        <ColorIndicator {...restProps}>
           <Pawn />
         </ColorIndicator>
       </PlayerInfo>
