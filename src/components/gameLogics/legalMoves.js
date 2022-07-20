@@ -207,7 +207,7 @@ LegalMoves.IsLegal = function LegalMovesIsLegal(pos, board) {
 
   var i = 0;
   while (true) {
-    if (i === opposites) break;
+    if (i === opposites.length) break;
     var pattern = [];
     switch (opposites[i][1][0]) {
       case 0:
@@ -230,23 +230,57 @@ LegalMoves.IsLegal = function LegalMovesIsLegal(pos, board) {
         break;
     }
 
-    const dir = dirVector(pos, {
-      x: Math.floor(opposites[i][0] / 8),
-      y: opposites[i][0] % 8,
-    });
+    if (
+      opposites[i][1][0] !== 0 &&
+      opposites[i][1][0] !== 5 &&
+      opposites[i][1][0] !== 2
+    ) {
+      const dir = dirVector(pos, {
+        x: Math.floor(opposites[i][0] / 8),
+        y: opposites[i][0] % 8,
+      });
 
-    if (dir === -1) {
-      opposites.splice(i, 1);
-      continue;
-    }
+      if (dir === -1) {
+        opposites.splice(i, 1);
+        continue;
+      }
 
-    if (pattern[dir[0]] === 0) {
-      opposites.splice(i, 1);
-      continue;
+      if (pattern[dir[0]] === 0) {
+        opposites.splice(i, 1);
+        continue;
+      }
     }
 
     i++;
   }
+
+  var valids = LegalMoves(pos, 5, board);
+  var alters = [];
+
+  while (true) {
+    const i = valids.indexOf(2);
+    if (i === -1) break;
+    var temp = [...board];
+    temp[pos.x * 8 + pos.y] = 0;
+    temp[i] = 5;
+    alters.push(temp);
+  }
+
+  opposites.forEach((item, i) => {
+    alters.forEach((alter) => {
+      const moves = LegalMoves(
+        { x: Math.floor(item[0] / 8), y: item[0] % 8 },
+        item[1],
+        alter
+      );
+
+      moves.forEach((m, j) => {
+        if (m === 3) valids[j] = 0;
+      });
+    });
+  });
+
+  return valids;
 };
 
 LegalMoves.King = function LegalMovesKing(pos, board) {

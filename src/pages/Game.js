@@ -144,11 +144,17 @@ export default function Game({
                             );
                           }
 
-                          var moves = LegalMoves(
-                            { x: i, y: j },
-                            pieces[i * 8 + j][0],
-                            pieces
-                          );
+                          var moves = [];
+
+                          if (pieces[i * 8 + j][0] !== 5) {
+                            moves = LegalMoves(
+                              { x: i, y: j },
+                              pieces[i * 8 + j][0],
+                              pieces
+                            );
+                          } else {
+                            moves = LegalMoves.IsLegal({ x: i, y: j }, pieces);
+                          }
 
                           var swapAble = [];
                           extraMoves.forEach((item) => {
