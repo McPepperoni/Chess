@@ -198,87 +198,100 @@ export default function LegalMoves(pos, id, board) {
 }
 
 LegalMoves.IsLegal = function LegalMovesIsLegal(pos, board) {
-  var opposites = [];
-  board.forEach((item, i) => {
-    if (item[0] !== -1 && item[1] !== board[pos.x * 8 + pos.y][1]) {
-      opposites.push([i, item[0]]);
-    }
-  });
-
-  var i = 0;
-  while (true) {
-    if (i === opposites.length) break;
-    var pattern = [];
-    switch (opposites[i][1][0]) {
-      case 0:
-        pattern = board[pos.x * 8 + pos.y][2] === true ? PawnMoved : Pawn;
-        break;
-      case 1:
-        pattern = Rook;
-        break;
-      case 2:
-        pattern = Knight;
-        break;
-      case 3:
-        pattern = Bishop;
-        break;
-      case 4:
-        pattern = Queen;
-        break;
-      default:
-        pattern = King;
-        break;
-    }
-
-    if (
-      opposites[i][1][0] !== 0 &&
-      opposites[i][1][0] !== 5 &&
-      opposites[i][1][0] !== 2
-    ) {
-      const dir = dirVector(pos, {
-        x: Math.floor(opposites[i][0] / 8),
-        y: opposites[i][0] % 8,
-      });
-
-      if (dir === -1) {
-        opposites.splice(i, 1);
-        continue;
-      }
-
-      if (pattern[dir[0]] === 0) {
-        opposites.splice(i, 1);
-        continue;
-      }
-    }
-
-    i++;
-  }
-
   var valids = LegalMoves(pos, 5, board);
+  var tempValids = [...valids]
   var alters = [];
+  var poses = []
 
   while (true) {
-    const i = valids.indexOf(2);
-    if (i === -1) break;
-    var temp = [...board];
-    temp[pos.x * 8 + pos.y] = 0;
-    temp[i] = 5;
+    var i = tempValids.indexOf(2);
+    if (i === -1) {
+      i = tempValids.indexOf(3);
+      if(i === -1) break;
+    }
+    var temp = board.map(item => item.slice())
+
+    temp[pos.x * 8 + pos.y][0] = -1;
+    temp[i][0] = 5;
+    
+    tempValids[i] = 0
+    poses.push({x: Math.floor(i / 8), y: i % 8})
     alters.push(temp);
   }
 
-  opposites.forEach((item, i) => {
-    alters.forEach((alter) => {
+  var opposites = [];
+  alters.forEach((alter, j) => {
+    var opposite = []
+    
+    alter.forEach((item, i) => {
+    if (item[0] !== -1 && item[1] !== alter[poses[j].x * 8 + poses[j].y][1]) {
+      opposite.push([i, item[0]]);
+    }
+    i = 0;
+    while (true) {
+      if (i === opposite.length) break;
+      var pattern = [];
+      switch (opposite[i][1][0]) {
+        case 0:
+          pattern = alter[pos.x * 8 + pos.y][2] === true ? PawnMoved : Pawn;
+          break;
+        case 1:
+          pattern = Rook;
+          break;
+        case 2:
+          pattern = Knight;
+          break;
+        case 3:
+          pattern = Bishop;
+          break;
+        case 4:
+          pattern = Queen;
+          break;
+        default:
+          pattern = King;
+          break;
+      }
+  
+      if (
+        opposite[i][1][0] !== 0 &&
+        opposite[i][1][0] !== 5 &&
+        opposite[i][1][0] !== 2
+      ) {
+        const dir = dirVector(pos, {
+          x: Math.floor(opposite[i][0] / 8),
+          y: opposite[i][0] % 8,
+        });
+  
+        if (dir === -1) {
+          opposite.splice(i, 1);
+          continue;
+        }
+  
+        if (pattern[dir[0]] === 0) {
+          opposite.splice(i, 1);
+          continue;
+        }
+      }
+  
+      i++;
+    }
+    if(opposite.length > 0) opposites.push(opposite)
+  })
+  });
+
+
+  opposites.forEach((opposite, i) => opposite.forEach((item) => {
+
       const moves = LegalMoves(
         { x: Math.floor(item[0] / 8), y: item[0] % 8 },
         item[1],
-        alter
+        alters[i]
       );
 
       moves.forEach((m, j) => {
         if (m === 3) valids[j] = 0;
       });
-    });
-  });
+  }));
 
   return valids;
 };
