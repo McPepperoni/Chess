@@ -32,6 +32,7 @@ function App() {
             player={2}
             currentPlayer={currentPlayer}
             taken={taken1}
+            setWinner={setWinner}
             winner={winner}
           >
             {player2.ign}
@@ -41,6 +42,7 @@ function App() {
             player={1}
             currentPlayer={currentPlayer}
             taken={taken2}
+            setWinner={setWinner}
             winner={winner}
           >
             {player1.ign}
